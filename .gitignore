@@ -1,0 +1,7 @@
+.idea
+__pycache__
+audio_output
+dist
+build
+test-tools.log
+*.pyc
