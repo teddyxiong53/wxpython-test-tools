@@ -85,25 +85,25 @@ class mainWin(wx_windows.MainFrame):
     def OnButtonTestAll(self, event):
         debug('test all')
         testAll()
-        self.m_textCtrlInfo.SetValue(testResult)
+        self.m_staticTextInfo.SetLabel(testResult)
 
     def OnButtonLeftMic(self, event):
         debug('test left mic')
         testLeftMic()
-        self.m_textCtrlInfo.SetValue(testResult)
+        self.m_staticTextInfo.SetLabel(testResult)
 
     def OnButtonRightMic(self, event):
         debug('test right mic')
         testRightMic()
-        self.m_textCtrlInfo.SetValue(testResult)
+        self.m_staticTextInfo.SetLabel(testResult)
     def OnButtonRef(self, event):
         debug('test ref ')
         testRef()
-        self.m_textCtrlInfo.SetValue(testResult)
+        self.m_staticTextInfo.SetLabel(testResult)
     def OnButtonAec(self, event):
         debug('test aec')
         testAec()
-        self.m_textCtrlInfo.SetValue(testResult)
+        self.m_staticTextInfo.SetLabel(testResult)
 
     def OnClose(self, event):
         debug('关闭软件')
@@ -144,8 +144,9 @@ if __name__ == '__main__':
     initHidWrapper()
     info('打开软件')
     # 下面是使用wxPython的固定用法
+    # 这个是把输出重定向到文件里。
+    # app = wx.App(redirect=True, filename="output.log")
     app = wx.App()
-
     main_win = mainWin(None)
 
     main_win.Show()

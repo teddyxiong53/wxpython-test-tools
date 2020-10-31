@@ -5,3 +5,5 @@ dist
 build
 test-tools.log
 *.pyc
+output.log
+test.py

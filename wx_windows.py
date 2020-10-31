@@ -17,7 +17,7 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"会议音箱测试程序V1.0", pos = wx.DefaultPosition, size = wx.Size( 800,600 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"会议音箱测试程序V1.0", pos = wx.DefaultPosition, size = wx.Size( 800,600 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.Size( 800,600 ), wx.Size( 800,600 ) )
 
@@ -64,10 +64,12 @@ class MainFrame ( wx.Frame ):
 
 		bSizer2.Add( gSizer2, 1, wx.EXPAND, 5 )
 
-		self.m_textCtrlInfo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 800,150 ), 0 )
-		self.m_textCtrlInfo.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
+		self.m_staticTextInfo = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 800,150 ), 0 )
+		self.m_staticTextInfo.Wrap( -1 )
 
-		bSizer2.Add( self.m_textCtrlInfo, 0, wx.ALL, 5 )
+		self.m_staticTextInfo.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
+		bSizer2.Add( self.m_staticTextInfo, 0, wx.ALL, 5 )
 
 
 		self.SetSizer( bSizer2 )

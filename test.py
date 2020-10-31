@@ -1,18 +1,15 @@
-from __future__ import print_function
-import wave
-import struct
+import wx
 
-# wf = wave.open('./audio_output/right.wav')
-# print(wf.tell())
-# wf.setpos(100)
-# print(wf.tell())
-#
-# wf.close()
+class MyFrame(wx.Frame):
+    def __init__(self, parent):
+        wx.Frame.__init__(self, parent, title="xx", size=(800,600))
+        panel = wx.Panel(self)
+        panel1 = wx.Panel(panel, pos=(0,0), size=(250, wx.EXPAND))
+        panel1.SetBackgroundColour("yellow")
+        panel2 = wx.Panel(panel, pos=(255,0), size=(wx.EXPAND, wx.EXPAND))
+        panel2.SetBackgroundColour("green")
 
-buffer = struct.pack('ihb', 1,2,3)
-print(buffer)
-print( struct.unpack('ihb', buffer))
-
-data = [1,2,3]
-buffer = struct.pack('!ihb', *data)
-print(buffer)
+app = wx.App()
+frame = MyFrame(None)
+frame.Show(True)
+app.MainLoop()
