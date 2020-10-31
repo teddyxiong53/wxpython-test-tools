@@ -7,3 +7,4 @@ echo "----------拷贝文件"
 copy hidapi.dll dist
 copy input.wav dist
 copy music.wav dist
+copy param.json dist

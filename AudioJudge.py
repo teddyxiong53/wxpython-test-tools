@@ -69,7 +69,7 @@ class AudioJudge():
         if not self.inputWaveFile:
             result = '打开' + filename + "失败"
             return result
-        print(self.inputWaveFile.getnframes())
+        # print(self.inputWaveFile.getnframes())
 
         try:
             self.inputWaveFile.setpos(READ_POS)

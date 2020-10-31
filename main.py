@@ -137,6 +137,7 @@ def initDir():
         os.mkdir(AUDIO_OUTPUT_DIR)
 
 if __name__ == '__main__':
+    initConfig()
     initLog()
     initDir()
     initAudioWrapper()

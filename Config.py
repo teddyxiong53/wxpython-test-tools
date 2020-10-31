@@ -1,6 +1,7 @@
 #coding: utf-8
 
 import pyaudio
+import json
 
 # 日志配置格式
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -27,3 +28,15 @@ RATE=16000
 SINE_ABS_BASE=10000
 # AEC的判断，不能大于这个值，大于则说明降噪效果不好。
 LINE_ABS_BASE=1000
+
+def initConfig():
+    global SINE_ABS_BASE, LINE_ABS_BASE
+    with open('param.json') as f:
+        param = json.load(f)
+        # print(SINE_ABS_BASE)
+        # print(param)
+        SINE_ABS_BASE = param['SINE_ABS_BASE']
+        LINE_ABS_BASE = param['LINE_ABS_BASE']
+        # print(SINE_ABS_BASE)
+if __name__ == '__main__':
+    initConfig()
