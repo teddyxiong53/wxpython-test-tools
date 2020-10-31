@@ -8,3 +8,7 @@ copy hidapi.dll dist
 copy input.wav dist
 copy music.wav dist
 copy param.json dist
+copy before_test.bmp dist
+copy ok.bmp dist
+copy fail.bmp dist
+

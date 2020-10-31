@@ -63,7 +63,7 @@ class mainWin(wx_windows.MainFrame):
             testLeftOk = False
         testResult = result
         self.m_staticTextLeft.SetLabel(testResult)
-
+        wx.Yield()
     def testRightMic(self):
         global testResult, testRightOk
 
@@ -79,7 +79,7 @@ class mainWin(wx_windows.MainFrame):
         testResult = result
 
         self.m_staticTextRight.SetLabel(testResult)
-
+        wx.Yield()
 
 
     def testRef(self):
@@ -96,7 +96,7 @@ class mainWin(wx_windows.MainFrame):
             testRefOk = False
         testResult = result
         self.m_staticTextRef.SetLabel(testResult)
-
+        wx.Yield()
     def testAec(self):
         global testResult, testAecOk
         hidWrapper.AecMic()
@@ -108,7 +108,7 @@ class mainWin(wx_windows.MainFrame):
             testAecOk = True
         testResult = result
         self.m_staticTextAec.SetLabel(testResult)
-
+        wx.Yield()
     def OnButtonTestAll(self, event):
         debug('test all')
         self.testAll()
