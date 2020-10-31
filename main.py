@@ -20,90 +20,120 @@ audioJudge = AudioJudge()
 testResult = ''
 
 
-def testAll():
-    testLeftMic()
-    testRightMic()
-    testRef()
-    testAec()
 
+PASS_STR = '正常'
 
-'''
-测试左边mic
-1、先发送hid命令，切换到左mic录音。
-2、用audio自播自录。
-3、分析得到的文件。判断是否合法。
-'''
-def testLeftMic():
-    # 先清空
-    global testResult
-    testResult = '左MIC：'
-    hidWrapper.leftMic()
-    audioWrapper.setInputFile(INPUT_FILE)
-    audioWrapper.genOutput(LEFT_FILE)
-    audioWrapper.waitForFinish()
-    result = audioJudge.judgeSine(LEFT_FILE)
-    testResult += result
-    testResult += ' '
-
-def testRightMic():
-    global testResult
-    testResult += '右MIC：'
-    hidWrapper.rightMic()
-    audioWrapper.setInputFile(INPUT_FILE)
-    audioWrapper.genOutput(RIGHT_FILE)
-    audioWrapper.waitForFinish()
-    result = audioJudge.judgeSine(RIGHT_FILE)
-    testResult += result
-    testResult += ' '
-
-
-def testRef():
-    global testResult
-    testResult += 'REF：'
-    hidWrapper.RefMic()
-    audioWrapper.setInputFile(INPUT_FILE)
-    audioWrapper.genOutput(REF_FILE)
-    audioWrapper.waitForFinish()
-    result = audioJudge.judgeSine(REF_FILE)
-    testResult += result
-    testResult += ' '
-
-def testAec():
-    global testResult
-    testResult += 'AEC：'
-    hidWrapper.AecMic()
-    audioWrapper.setInputFile(MUSIC_FILE)
-    audioWrapper.genOutput(AEC_FILE)
-    audioWrapper.waitForFinish()
-    result = audioJudge.judgeLine(AEC_FILE)
-    testResult += result
-    testResult += ' '
 
 
 # 创建mainWin类并传入wx_windows.MainFrame
 class mainWin(wx_windows.MainFrame):
+    testLeftOk = False
+    testRightOk = False
+    testRefOk = False
+    testAecOk = False
+
+    def testAll(self):
+        self.testLeftMic()
+        self.testRightMic()
+        self.testRef()
+        self.testAec()
+        if self.testLeftOk and self.testRightOk and self.testRefOk and self.testAecOk:
+            self.m_bpButtonResult.SetBitmap(wx.Bitmap('./ok.bmp'))
+        else:
+            self.m_bpButtonResult.SetBitmap(wx.Bitmap('./fail.bmp'))
+
+    '''
+    测试左边mic
+    1、先发送hid命令，切换到左mic录音。
+    2、用audio自播自录。
+    3、分析得到的文件。判断是否合法。
+    '''
+    def testLeftMic(self):
+        # 先清空
+        global testLeftOk, testResult
+
+        hidWrapper.leftMic()
+        audioWrapper.setInputFile(INPUT_FILE)
+        audioWrapper.genOutput(LEFT_FILE)
+        audioWrapper.waitForFinish()
+        result = audioJudge.judgeSine(LEFT_FILE)
+        if result == PASS_STR:
+            testLeftOk = True
+        else:
+            testLeftOk = False
+        testResult = result
+        self.m_staticTextLeft.SetLabel(testResult)
+
+    def testRightMic(self):
+        global testResult, testRightOk
+
+        hidWrapper.rightMic()
+        audioWrapper.setInputFile(INPUT_FILE)
+        audioWrapper.genOutput(RIGHT_FILE)
+        audioWrapper.waitForFinish()
+        result = audioJudge.judgeSine(RIGHT_FILE)
+        if result == PASS_STR:
+            testRightOk = True
+        else:
+            testRightOk = False
+        testResult = result
+
+        self.m_staticTextRight.SetLabel(testResult)
+
+
+
+    def testRef(self):
+        global testResult, testRefOk
+
+        hidWrapper.RefMic()
+        audioWrapper.setInputFile(INPUT_FILE)
+        audioWrapper.genOutput(REF_FILE)
+        audioWrapper.waitForFinish()
+        result = audioJudge.judgeSine(REF_FILE)
+        if result == PASS_STR:
+            testRefOk = True
+        else:
+            testRefOk = False
+        testResult = result
+        self.m_staticTextRef.SetLabel(testResult)
+
+    def testAec(self):
+        global testResult, testAecOk
+        hidWrapper.AecMic()
+        audioWrapper.setInputFile(MUSIC_FILE)
+        audioWrapper.genOutput(AEC_FILE)
+        audioWrapper.waitForFinish()
+        result = audioJudge.judgeLine(AEC_FILE)
+        if result == PASS_STR:
+            testAecOk = True
+        testResult = result
+        self.m_staticTextAec.SetLabel(testResult)
+
     def OnButtonTestAll(self, event):
         debug('test all')
-        testAll()
-        self.m_staticTextInfo.SetLabel(testResult)
+        self.testAll()
+
 
     def OnButtonLeftMic(self, event):
         debug('test left mic')
-        testLeftMic()
-        self.m_staticTextInfo.SetLabel(testResult)
+        self.testLeftMic()
+
+
 
     def OnButtonRightMic(self, event):
         debug('test right mic')
-        testRightMic()
-        self.m_staticTextInfo.SetLabel(testResult)
+        self.testRightMic()
+
     def OnButtonRef(self, event):
         debug('test ref ')
-        testRef()
-        self.m_staticTextInfo.SetLabel(testResult)
+        self.testRef()
+
+
     def OnButtonAec(self, event):
         debug('test aec')
-        testAec()
-        self.m_staticTextInfo.SetLabel(testResult)
+        self.testAec()
+
+
 
     def OnClose(self, event):
         debug('关闭软件')
