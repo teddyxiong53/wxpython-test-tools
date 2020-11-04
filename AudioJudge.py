@@ -55,7 +55,7 @@ class AudioJudge():
             # print(i)
             if unpacked_data[i] == unpacked_data[i+1]:
                 result = '有截顶'
-                break
+                return result
         result = '正常'
         return result
 

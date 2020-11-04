@@ -2,6 +2,10 @@
 
 import pyaudio
 import json
+# 版本号
+SOFTWARE_VERSION = "V1.0"
+SOFTWARE_NAME = "会议音箱测试软件"
+SOFTWARE_AUTHOR = "熊汉良"
 
 # 日志配置格式
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"

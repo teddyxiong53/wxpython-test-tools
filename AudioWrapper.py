@@ -19,22 +19,7 @@ class AudioWrapper():
         self.readFrames = []
         self.inputFile = INPUT_FILE
         self.isPlaying = False
-        self.writeStream = self.pa.open(
-            format=FORMAT,
-            channels=CHANNELS,
-            rate=RATE,
-            # input=True,
-            output=True,
-            frames_per_buffer=CHUNK
-        )
-        self.readStream = self.pa.open(
-            format=FORMAT,
-            channels=CHANNELS,
-            rate=RATE,
-            input=True,
-            # output=True,
-            frames_per_buffer=CHUNK
-        )
+
 
     def record(self):
         self.recordThread = threading.Thread(target=self.recordThreadProc)
@@ -109,7 +94,23 @@ class AudioWrapper():
     def setInputFile(self, filename):
         self.inputFile = filename
 
-
+    def open(self):
+        self.writeStream = self.pa.open(
+            format=FORMAT,
+            channels=CHANNELS,
+            rate=RATE,
+            # input=True,
+            output=True,
+            frames_per_buffer=CHUNK
+        )
+        self.readStream = self.pa.open(
+            format=FORMAT,
+            channels=CHANNELS,
+            rate=RATE,
+            input=True,
+            # output=True,
+            frames_per_buffer=CHUNK
+        )
 if __name__ == '__main__':
     audio = AudioWrapper()
     audio.play()

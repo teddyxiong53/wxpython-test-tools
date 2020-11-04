@@ -13,9 +13,7 @@ import sys, os
 
 
 
-audioWrapper = AudioWrapper()
-hidWrapper = HidWrapper()
-audioJudge = AudioJudge()
+
 
 testResult = ''
 
@@ -31,6 +29,30 @@ class mainWin(wx_windows.MainFrame):
     testRightOk = False
     testRefOk = False
     testAecOk = False
+
+
+    audioJudge = AudioJudge()
+    def initAudioWrapper(self):
+        try:
+            self.audioWrapper = AudioWrapper()
+            self.audioWrapper.open()
+        except:
+            error("打开usb声卡失败")
+            self.m_statusBar1.SetStatusText("打开usb声卡失败")
+
+    def initHidWrapper(self):
+        self.soundCardOk = False
+        self.hidWrapper = HidWrapper()
+        if not self.hidWrapper.open():
+            self.m_statusBar1.SetStatusText("打开usb声卡失败，请先用usb把音箱连接到电脑")
+        else:
+            self.soundCardOk = True
+            self.m_statusBar1.SetStatusText("")
+
+    def initSystem(self):
+        self.initAudioWrapper()
+        self.initHidWrapper()
+        # self.hidWrapper.startMonitorUsb()
 
     def testAll(self):
         self.testLeftMic()
@@ -51,12 +73,14 @@ class mainWin(wx_windows.MainFrame):
     def testLeftMic(self):
         # 先清空
         global testLeftOk, testResult
-
-        hidWrapper.leftMic()
-        audioWrapper.setInputFile(INPUT_FILE)
-        audioWrapper.genOutput(LEFT_FILE)
-        audioWrapper.waitForFinish()
-        result = audioJudge.judgeSine(LEFT_FILE)
+        try:
+            self.hidWrapper.leftMic()
+        except:
+            pass
+        self.audioWrapper.setInputFile(INPUT_FILE)
+        self.audioWrapper.genOutput(LEFT_FILE)
+        self.audioWrapper.waitForFinish()
+        result = self.audioJudge.judgeSine(LEFT_FILE)
         if result == PASS_STR:
             testLeftOk = True
         else:
@@ -67,11 +91,11 @@ class mainWin(wx_windows.MainFrame):
     def testRightMic(self):
         global testResult, testRightOk
 
-        hidWrapper.rightMic()
-        audioWrapper.setInputFile(INPUT_FILE)
-        audioWrapper.genOutput(RIGHT_FILE)
-        audioWrapper.waitForFinish()
-        result = audioJudge.judgeSine(RIGHT_FILE)
+        self.hidWrapper.rightMic()
+        self.audioWrapper.setInputFile(INPUT_FILE)
+        self.audioWrapper.genOutput(RIGHT_FILE)
+        self.audioWrapper.waitForFinish()
+        result = self.audioJudge.judgeSine(RIGHT_FILE)
         if result == PASS_STR:
             testRightOk = True
         else:
@@ -85,11 +109,11 @@ class mainWin(wx_windows.MainFrame):
     def testRef(self):
         global testResult, testRefOk
 
-        hidWrapper.RefMic()
-        audioWrapper.setInputFile(INPUT_FILE)
-        audioWrapper.genOutput(REF_FILE)
-        audioWrapper.waitForFinish()
-        result = audioJudge.judgeSine(REF_FILE)
+        self.hidWrapper.RefMic()
+        self.audioWrapper.setInputFile(INPUT_FILE)
+        self.audioWrapper.genOutput(REF_FILE)
+        self.audioWrapper.waitForFinish()
+        result = self.audioJudge.judgeSine(REF_FILE)
         if result == PASS_STR:
             testRefOk = True
         else:
@@ -99,11 +123,11 @@ class mainWin(wx_windows.MainFrame):
         wx.Yield()
     def testAec(self):
         global testResult, testAecOk
-        hidWrapper.AecMic()
-        audioWrapper.setInputFile(MUSIC_FILE)
-        audioWrapper.genOutput(AEC_FILE)
-        audioWrapper.waitForFinish()
-        result = audioJudge.judgeLine(AEC_FILE)
+        self.hidWrapper.AecMic()
+        self.audioWrapper.setInputFile(MUSIC_FILE)
+        self.audioWrapper.genOutput(AEC_FILE)
+        self.audioWrapper.waitForFinish()
+        result = self.audioJudge.judgeLine(AEC_FILE)
         if result == PASS_STR:
             testAecOk = True
         testResult = result
@@ -137,7 +161,7 @@ class mainWin(wx_windows.MainFrame):
 
     def OnClose(self, event):
         debug('关闭软件')
-        audioWrapper.close()
+        self.audioWrapper.close()
         wx.Exit()
 
     def OnMenuExit(self, event):
@@ -145,6 +169,7 @@ class mainWin(wx_windows.MainFrame):
 
     def OnMenuAbout(self, event):
         dialogAbout = wx_windows.DialogAbout(self)
+        dialogAbout.m_staticText1.SetLabel(SOFTWARE_NAME+SOFTWARE_VERSION+'\n'+SOFTWARE_AUTHOR)
         dialogAbout.ShowModal()
 
 
@@ -152,11 +177,7 @@ class mainWin(wx_windows.MainFrame):
 def initLog():
     logging.basicConfig(filename='test-tools.log', level=logging.DEBUG, format=LOG_FORMAT)
 
-def initAudioWrapper():
-    pass
 
-def initHidWrapper():
-    pass
 
 def initAudioJudge():
     pass
@@ -170,15 +191,14 @@ if __name__ == '__main__':
     initConfig()
     initLog()
     initDir()
-    initAudioWrapper()
-    initHidWrapper()
+
     info('打开软件')
     # 下面是使用wxPython的固定用法
     # 这个是把输出重定向到文件里。
     # app = wx.App(redirect=True, filename="output.log")
     app = wx.App()
     main_win = mainWin(None)
-
+    main_win.SetTitle(SOFTWARE_NAME + SOFTWARE_VERSION)
     main_win.Show()
-
+    main_win.initSystem()
     app.MainLoop()
