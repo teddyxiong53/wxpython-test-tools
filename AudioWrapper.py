@@ -14,11 +14,7 @@ from Config import *
 
 class AudioWrapper():
     def __init__(self):
-        self.pa = pyaudio.PyAudio()
-        self.writeStream = None
-        self.readFrames = []
-        self.inputFile = INPUT_FILE
-        self.isPlaying = False
+        pass
 
 
     def record(self):
@@ -78,13 +74,22 @@ class AudioWrapper():
         self.inputWaveFile.close()
     # 用这个做对外接口。
     def genOutput(self, outfile):
+        self.pa = pyaudio.PyAudio()
+        self.writeStream = None
+        self.readFrames = []
+        # self.inputFile = INPUT_FILE
+        self.isPlaying = False
+
         self.outputFile = outfile
+        self.open()
+
         self.play()
         self.record()
 
     def waitForFinish(self):
         self.playThread.join()
         self.recordThread.join()
+        self.close()
 
     def close(self):
         try:
@@ -95,7 +100,8 @@ class AudioWrapper():
             if self.pa:
                 self.pa.terminate()
         except:
-            pass
+            print("关闭出错了")
+
     def setInputFile(self, filename):
         self.inputFile = filename
 
@@ -117,12 +123,7 @@ class AudioWrapper():
             frames_per_buffer=CHUNK
         )
 if __name__ == '__main__':
-    audio = AudioWrapper()
-    audio.play()
-    audio.record()
-    audio.playThread.join()
-    audio.recordThread.join()
-    audio.pa.terminate()
+
     print("end of code")
 
 

@@ -21,7 +21,8 @@ testResult = ''
 
 PASS_STR = '正常'
 
-
+OPEN_FAIL_STR = '打开USB声卡失败，请确认用USB连接音箱到电脑后再重试'
+OPEN_OK_STR = '打开USB声卡成功'
 
 # 创建mainWin类并传入wx_windows.MainFrame
 class mainWin(wx_windows.MainFrame):
@@ -33,26 +34,19 @@ class mainWin(wx_windows.MainFrame):
 
     audioJudge = AudioJudge()
     def initAudioWrapper(self):
-        try:
-            self.audioWrapper = AudioWrapper()
-            self.audioWrapper.open()
-        except:
-            error("打开usb声卡失败")
-            self.m_statusBar1.SetStatusText("打开usb声卡失败")
+        self.audioWrapper = AudioWrapper()
+
+
 
     def initHidWrapper(self):
         self.soundCardOk = False
         self.hidWrapper = HidWrapper()
-        if not self.hidWrapper.open():
-            self.m_statusBar1.SetStatusText("打开usb声卡失败，请先用usb把音箱连接到电脑，然后关闭本窗口会自动重新打开")
-        else:
-            self.soundCardOk = True
-            self.m_statusBar1.SetStatusText("")
+
 
     def initSystem(self):
         self.initAudioWrapper()
         self.initHidWrapper()
-        # self.hidWrapper.startMonitorUsb()
+
 
     def testAll(self):
         self.testLeftMic()
@@ -76,7 +70,10 @@ class mainWin(wx_windows.MainFrame):
         try:
             self.hidWrapper.leftMic()
         except:
-            pass
+            # 出错了。然后就设置状态栏，返回
+            self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
+            return
+        self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(INPUT_FILE)
         self.audioWrapper.genOutput(LEFT_FILE)
         self.audioWrapper.waitForFinish()
@@ -90,8 +87,13 @@ class mainWin(wx_windows.MainFrame):
         wx.Yield()
     def testRightMic(self):
         global testResult, testRightOk
-
-        self.hidWrapper.rightMic()
+        try:
+            self.hidWrapper.rightMic()
+        except:
+            # 出错了。然后就设置状态栏，返回
+            self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
+            return
+        self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(INPUT_FILE)
         self.audioWrapper.genOutput(RIGHT_FILE)
         self.audioWrapper.waitForFinish()
@@ -108,8 +110,13 @@ class mainWin(wx_windows.MainFrame):
 
     def testRef(self):
         global testResult, testRefOk
-
-        self.hidWrapper.RefMic()
+        try:
+            self.hidWrapper.RefMic()
+        except:
+            # 出错了。然后就设置状态栏，返回
+            self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
+            return
+        self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(INPUT_FILE)
         self.audioWrapper.genOutput(REF_FILE)
         self.audioWrapper.waitForFinish()
@@ -123,7 +130,13 @@ class mainWin(wx_windows.MainFrame):
         wx.Yield()
     def testAec(self):
         global testResult, testAecOk
-        self.hidWrapper.AecMic()
+        try:
+            self.hidWrapper.AecMic()
+        except:
+            # 出错了。然后就设置状态栏，返回
+            self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
+            return
+        self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(MUSIC_FILE)
         self.audioWrapper.genOutput(AEC_FILE)
         self.audioWrapper.waitForFinish()

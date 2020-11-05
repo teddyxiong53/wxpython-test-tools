@@ -8,3 +8,5 @@ test-tools.log
 output.log
 test.py
 dist.zip
+*.spec
+
