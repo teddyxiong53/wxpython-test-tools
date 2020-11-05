@@ -77,10 +77,10 @@ class AudioJudge():
             print("set pos fail")
             result = '文件'+ filename + '大小不对'
             return result
-        data = self.inputWaveFile.readframes(16000)
+        data = self.inputWaveFile.readframes(48000)
         # 取到数据后，需要大小端转换。
         # 得到的是一个元组。
-        unpacked_data = struct.unpack("<16000h", data)
+        unpacked_data = struct.unpack("<48000h", data)
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)

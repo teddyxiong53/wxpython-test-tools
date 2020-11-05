@@ -87,10 +87,15 @@ class AudioWrapper():
         self.recordThread.join()
 
     def close(self):
-        self.writeStream.close()
-        self.readStream.close()
-        self.pa.terminate()
-
+        try:
+            if self.writeStream:
+                self.writeStream.close()
+            if self.readStream:
+                self.readStream.close()
+            if self.pa:
+                self.pa.terminate()
+        except:
+            pass
     def setInputFile(self, filename):
         self.inputFile = filename
 

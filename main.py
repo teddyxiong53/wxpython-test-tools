@@ -44,7 +44,7 @@ class mainWin(wx_windows.MainFrame):
         self.soundCardOk = False
         self.hidWrapper = HidWrapper()
         if not self.hidWrapper.open():
-            self.m_statusBar1.SetStatusText("打开usb声卡失败，请先用usb把音箱连接到电脑")
+            self.m_statusBar1.SetStatusText("打开usb声卡失败，请先用usb把音箱连接到电脑，然后关闭本窗口会自动重新打开")
         else:
             self.soundCardOk = True
             self.m_statusBar1.SetStatusText("")
