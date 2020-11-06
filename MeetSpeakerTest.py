@@ -7,7 +7,8 @@ from logging import debug, error, info
 from AudioWrapper import AudioWrapper
 from HidWrapper import HidWrapper
 from AudioJudge import AudioJudge
-from Config import *
+# from Config import *
+import Config
 
 import sys, os
 
@@ -74,10 +75,10 @@ class mainWin(wx_windows.MainFrame):
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
-        self.audioWrapper.setInputFile(INPUT_FILE)
-        self.audioWrapper.genOutput(LEFT_FILE)
+        self.audioWrapper.setInputFile(Config.INPUT_FILE)
+        self.audioWrapper.genOutput(Config.LEFT_FILE)
         self.audioWrapper.waitForFinish()
-        result = self.audioJudge.judgeSine(LEFT_FILE)
+        result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
             testLeftOk = True
         else:
@@ -94,10 +95,10 @@ class mainWin(wx_windows.MainFrame):
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
-        self.audioWrapper.setInputFile(INPUT_FILE)
-        self.audioWrapper.genOutput(RIGHT_FILE)
+        self.audioWrapper.setInputFile(Config.INPUT_FILE)
+        self.audioWrapper.genOutput(Config.RIGHT_FILE)
         self.audioWrapper.waitForFinish()
-        result = self.audioJudge.judgeSine(RIGHT_FILE)
+        result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
             testRightOk = True
         else:
@@ -117,10 +118,10 @@ class mainWin(wx_windows.MainFrame):
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
-        self.audioWrapper.setInputFile(INPUT_FILE)
-        self.audioWrapper.genOutput(REF_FILE)
+        self.audioWrapper.setInputFile(Config.INPUT_FILE)
+        self.audioWrapper.genOutput(Config.REF_FILE)
         self.audioWrapper.waitForFinish()
-        result = self.audioJudge.judgeSine(REF_FILE)
+        result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE)
         if result == PASS_STR:
             testRefOk = True
         else:
@@ -137,10 +138,10 @@ class mainWin(wx_windows.MainFrame):
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
-        self.audioWrapper.setInputFile(MUSIC_FILE)
-        self.audioWrapper.genOutput(AEC_FILE)
+        self.audioWrapper.setInputFile(Config.MUSIC_FILE)
+        self.audioWrapper.genOutput(Config.AEC_FILE)
         self.audioWrapper.waitForFinish()
-        result = self.audioJudge.judgeLine(AEC_FILE)
+        result = self.audioJudge.judgeLine(Config.AEC_FILE)
         if result == PASS_STR:
             testAecOk = True
         testResult = result
@@ -182,13 +183,13 @@ class mainWin(wx_windows.MainFrame):
 
     def OnMenuAbout(self, event):
         dialogAbout = wx_windows.DialogAbout(self)
-        dialogAbout.m_staticText1.SetLabel(SOFTWARE_NAME+SOFTWARE_VERSION+'\n'+SOFTWARE_AUTHOR)
+        dialogAbout.m_staticText1.SetLabel(Config.SOFTWARE_NAME+Config.SOFTWARE_VERSION+'\n'+Config.SOFTWARE_AUTHOR)
         dialogAbout.ShowModal()
 
 
 
 def initLog():
-    logging.basicConfig(filename='test-tools.log', level=logging.DEBUG, format=LOG_FORMAT)
+    logging.basicConfig(filename='test-tools.log', level=logging.DEBUG, format=Config.LOG_FORMAT)
 
 
 
@@ -197,11 +198,13 @@ def initAudioJudge():
 
 def initDir():
     # 如果没有audio_output目录。创建
-    if not os.path.exists(AUDIO_OUTPUT_DIR):
-        os.mkdir(AUDIO_OUTPUT_DIR)
+    if not os.path.exists(Config.AUDIO_OUTPUT_DIR):
+        os.mkdir(Config.AUDIO_OUTPUT_DIR)
 
 if __name__ == '__main__':
-    initConfig()
+    print("before load json:", Config.SINE_ABS_BASE)
+    Config.initConfig()
+    print("after load json:", Config.SINE_ABS_BASE)
     initLog()
     initDir()
 
@@ -211,7 +214,7 @@ if __name__ == '__main__':
     # app = wx.App(redirect=True, filename="output.log")
     app = wx.App()
     main_win = mainWin(None)
-    main_win.SetTitle(SOFTWARE_NAME + SOFTWARE_VERSION)
+    main_win.SetTitle(Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION)
     main_win.Show()
     main_win.initSystem()
     app.MainLoop()

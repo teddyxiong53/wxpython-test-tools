@@ -24,7 +24,8 @@ class AudioJudge():
     seek到20000。读取32个字节数据。就是一个周期的数据。
 
     '''
-    def judgeSine(self, filename):
+    def judgeSine(self, filename, judgeValue):
+        print("--------judgeValue:", judgeValue)
         result = ''
         self.inputWaveFile = wave.open(filename)
         if not self.inputWaveFile:
@@ -47,7 +48,7 @@ class AudioJudge():
         min_val = min(unpacked_data)
         print(max_val)
         print(min_val)
-        if max_val < SINE_ABS_BASE or abs(min_val) < SINE_ABS_BASE:
+        if max_val < judgeValue or abs(min_val) < judgeValue:
             result = '录音数据幅值太小'
             return result
         # 判断是否有截顶。
