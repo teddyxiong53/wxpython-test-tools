@@ -3,7 +3,7 @@ chcp 65001
 echo "------清空dist目录"
 rd /S /Q dist
 echo "-----------生成exe文件"
-pyinstaller.exe -F MeetSpeakerTest.py
+pyinstaller.exe -F -w MeetSpeakerTest.py
 echo "----------拷贝文件"
 copy hidapi.dll dist
 copy input.wav dist

@@ -211,8 +211,8 @@ if __name__ == '__main__':
     info('打开软件')
     # 下面是使用wxPython的固定用法
     # 这个是把输出重定向到文件里。
-    # app = wx.App(redirect=True, filename="output.log")
-    app = wx.App()
+    app = wx.App(redirect=True, filename="output.log")
+    # app = wx.App()
     main_win = mainWin(None)
     main_win.SetTitle(Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION)
     main_win.Show()
