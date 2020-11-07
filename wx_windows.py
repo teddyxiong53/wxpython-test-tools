@@ -57,8 +57,10 @@ class MainFrame ( wx.Frame ):
 		self.m_buttonLeftMic = wx.Button( self, wx.ID_ANY, u"测试左MIC", wx.Point( -1,-1 ), wx.Size( 100,50 ), 0 )
 		gSizer2.Add( self.m_buttonLeftMic, 0, wx.ALL, 5 )
 
-		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 200,-1 ), 0 )
+		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.Point( -1,-1 ), wx.Size( -1,-1 ), 0 )
 		self.m_staticTextLeft.Wrap( -1 )
+
+		self.m_staticTextLeft.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
 		gSizer2.Add( self.m_staticTextLeft, 0, wx.ALL, 5 )
 
@@ -68,6 +70,8 @@ class MainFrame ( wx.Frame ):
 		self.m_staticTextRight = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTextRight.Wrap( -1 )
 
+		self.m_staticTextRight.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
+
 		gSizer2.Add( self.m_staticTextRight, 0, wx.ALL, 5 )
 
 		self.m_buttonRef = wx.Button( self, wx.ID_ANY, u"测试REF", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
@@ -76,6 +80,8 @@ class MainFrame ( wx.Frame ):
 		self.m_staticTextRef = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTextRef.Wrap( -1 )
 
+		self.m_staticTextRef.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
+
 		gSizer2.Add( self.m_staticTextRef, 0, wx.ALL, 5 )
 
 		self.m_buttonAec = wx.Button( self, wx.ID_ANY, u"测试AEC", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
@@ -83,6 +89,8 @@ class MainFrame ( wx.Frame ):
 
 		self.m_staticTextAec = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTextAec.Wrap( -1 )
+
+		self.m_staticTextAec.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
 		gSizer2.Add( self.m_staticTextAec, 0, wx.ALL, 5 )
 

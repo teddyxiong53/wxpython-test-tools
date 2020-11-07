@@ -9,7 +9,7 @@ from logging import debug, error, info
 
 from Config import *
 
-
+import wx
 
 
 class AudioWrapper():
@@ -65,9 +65,11 @@ class AudioWrapper():
 
         self.writeStream.start_stream()
         data = self.inputWaveFile.readframes(CHUNK)
+
         while data:
             self.writeStream.write(data)
             data = self.inputWaveFile.readframes(CHUNK)
+
         self.writeStream.stop_stream()
 
         self.isPlaying = False

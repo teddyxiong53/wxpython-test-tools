@@ -54,11 +54,13 @@ class mainWin(wx_windows.MainFrame):
         self.testRightMic()
         self.testRef()
         self.testAec()
+        # self.testLeftOk = True;self.testRightOk = True; self.testRefOk =True; self.testAecOk = True
         if self.testLeftOk and self.testRightOk and self.testRefOk and self.testAecOk:
             self.m_bpButtonResult.SetBitmap(wx.Bitmap('./ok.bmp'))
         else:
             self.m_bpButtonResult.SetBitmap(wx.Bitmap('./fail.bmp'))
-
+        # 这里必须yield一下，不然测试过了，界面也不会刷新的。
+        wx.Yield()
     '''
     测试左边mic
     1、先发送hid命令，切换到左mic录音。
@@ -84,8 +86,14 @@ class mainWin(wx_windows.MainFrame):
         else:
             testLeftOk = False
         testResult = result
+
+        if testLeftOk:
+            self.m_staticTextLeft.SetBackgroundColour(wx.GREEN)
+        else:
+            self.m_staticTextLeft.SetBackgroundColour(wx.RED)
         self.m_staticTextLeft.SetLabel(testResult)
         wx.Yield()
+
     def testRightMic(self):
         global testResult, testRightOk
         try:
@@ -104,7 +112,10 @@ class mainWin(wx_windows.MainFrame):
         else:
             testRightOk = False
         testResult = result
-
+        if testRightOk:
+            self.m_staticTextRight.SetBackgroundColour(wx.GREEN)
+        else:
+            self.m_staticTextRight.SetBackgroundColour(wx.RED)
         self.m_staticTextRight.SetLabel(testResult)
         wx.Yield()
 
@@ -127,8 +138,13 @@ class mainWin(wx_windows.MainFrame):
         else:
             testRefOk = False
         testResult = result
+        if testRefOk:
+            self.m_staticTextRef.SetBackgroundColour(wx.GREEN)
+        else:
+            self.m_staticTextRef.SetBackgroundColour(wx.RED)
         self.m_staticTextRef.SetLabel(testResult)
         wx.Yield()
+
     def testAec(self):
         global testResult, testAecOk
         try:
@@ -142,9 +158,16 @@ class mainWin(wx_windows.MainFrame):
         self.audioWrapper.genOutput(Config.AEC_FILE)
         self.audioWrapper.waitForFinish()
         result = self.audioJudge.judgeLine(Config.AEC_FILE)
+        print(result)
         if result == PASS_STR:
             testAecOk = True
+        else:
+            testAecOk = False
         testResult = result
+        if testAecOk:
+            self.m_staticTextAec.SetBackgroundColour(wx.GREEN)
+        else:
+            self.m_staticTextAec.SetBackgroundColour(wx.RED)
         self.m_staticTextAec.SetLabel(testResult)
         wx.Yield()
     def OnButtonTestAll(self, event):
@@ -211,8 +234,8 @@ if __name__ == '__main__':
     info('打开软件')
     # 下面是使用wxPython的固定用法
     # 这个是把输出重定向到文件里。
-    app = wx.App(redirect=True, filename="output.log")
-    # app = wx.App()
+    # app = wx.App(redirect=True, filename="output.log")
+    app = wx.App()
     main_win = mainWin(None)
     main_win.SetTitle(Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION)
     main_win.Show()
