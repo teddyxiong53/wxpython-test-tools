@@ -37,7 +37,7 @@ class AudioJudge():
             self.inputWaveFile.setpos(READ_POS)
         except:
             print("set pos fail")
-            result = '文件'+ filename + '大小不对'
+            result = '录音文件大小不对'
             return result
         data = self.inputWaveFile.readframes(16)
         # 取到数据后，需要大小端转换。

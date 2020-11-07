@@ -25,6 +25,10 @@ PASS_STR = '正常'
 OPEN_FAIL_STR = '打开USB声卡失败，请确认用USB连接音箱到电脑后再重试'
 OPEN_OK_STR = '打开USB声卡成功'
 
+
+TEST_ALL_START = '一键测试所有'
+TEST_ALL_STOP = '停止'
+
 # 创建mainWin类并传入wx_windows.MainFrame
 class mainWin(wx_windows.MainFrame):
     testLeftOk = False
@@ -32,6 +36,10 @@ class mainWin(wx_windows.MainFrame):
     testRefOk = False
     testAecOk = False
 
+    # 在点击开始测试所有后，可以按键停下来。
+    # stopAll = False
+    # 是否正在进行测试所有的操作。
+    isTestingAll = False
 
     audioJudge = AudioJudge()
     def initAudioWrapper(self):
@@ -50,15 +58,24 @@ class mainWin(wx_windows.MainFrame):
 
 
     def testAll(self):
-        self.testLeftMic()
-        self.testRightMic()
-        self.testRef()
-        self.testAec()
+        if self.isTestingAll:
+            self.isTestingAll = False
+            self.m_buttonTestAll.SetLabelText(TEST_ALL_START)
+            # 需要进行停止操作
+            wx.Yield()
+            return
+        self.isTestingAll = True
+        self.testLeftMic(True)
+        self.testRightMic(True)
+        self.testRef(True)
+        self.testAec(True)
         # self.testLeftOk = True;self.testRightOk = True; self.testRefOk =True; self.testAecOk = True
         if self.testLeftOk and self.testRightOk and self.testRefOk and self.testAecOk:
             self.m_bpButtonResult.SetBitmap(wx.Bitmap('./ok.bmp'))
         else:
             self.m_bpButtonResult.SetBitmap(wx.Bitmap('./fail.bmp'))
+        # 测试所有完成后，把标志设置一下。
+        self.isTestingAll = False
         # 这里必须yield一下，不然测试过了，界面也不会刷新的。
         wx.Yield()
     '''
@@ -67,7 +84,7 @@ class mainWin(wx_windows.MainFrame):
     2、用audio自播自录。
     3、分析得到的文件。判断是否合法。
     '''
-    def testLeftMic(self):
+    def testLeftMic(self, fromTestAll=False):
         # 先清空
         global testLeftOk, testResult
         try:
@@ -76,9 +93,19 @@ class mainWin(wx_windows.MainFrame):
             # 出错了。然后就设置状态栏，返回
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
+        if fromTestAll:
+            # 如果是点击测试所有而调用的这个。
+            # 那么就把测试所有的按钮，在这里改成停止
+            if self.isTestingAll:
+                self.m_buttonTestAll.SetLabelText(TEST_ALL_STOP)
+
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
-        self.audioWrapper.genOutput(Config.LEFT_FILE)
+        if fromTestAll:
+            self.audioWrapper.genOutput(Config.LEFT_FILE, self.isTestingAll)
+        else:
+            self.audioWrapper.genOutput(Config.LEFT_FILE, True)
+
         self.audioWrapper.waitForFinish()
         result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
@@ -94,7 +121,7 @@ class mainWin(wx_windows.MainFrame):
         self.m_staticTextLeft.SetLabel(testResult)
         wx.Yield()
 
-    def testRightMic(self):
+    def testRightMic(self, fromTestAll=False):
         global testResult, testRightOk
         try:
             self.hidWrapper.rightMic()
@@ -104,8 +131,16 @@ class mainWin(wx_windows.MainFrame):
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
-        self.audioWrapper.genOutput(Config.RIGHT_FILE)
+        if fromTestAll:
+            self.audioWrapper.genOutput(Config.RIGHT_FILE, self.isTestingAll)
+        else:
+            self.audioWrapper.genOutput(Config.RIGHT_FILE, True)
+
         self.audioWrapper.waitForFinish()
+        if fromTestAll and not self.isTestingAll:
+            wx.Yield()
+            return
+
         result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
             testRightOk = True
@@ -120,7 +155,7 @@ class mainWin(wx_windows.MainFrame):
         wx.Yield()
 
 
-    def testRef(self):
+    def testRef(self, fromTestAll=False):
         global testResult, testRefOk
         try:
             self.hidWrapper.RefMic()
@@ -128,10 +163,17 @@ class mainWin(wx_windows.MainFrame):
             # 出错了。然后就设置状态栏，返回
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
-        self.m_statusBar1.SetStatusText(OPEN_OK_STR)
+
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
-        self.audioWrapper.genOutput(Config.REF_FILE)
+        if fromTestAll:
+            self.audioWrapper.genOutput(Config.REF_FILE, self.isTestingAll)
+        else:
+            self.audioWrapper.genOutput(Config.REF_FILE, True)
+
         self.audioWrapper.waitForFinish()
+        if fromTestAll and not self.isTestingAll:
+            wx.Yield()
+            return
         result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE)
         if result == PASS_STR:
             testRefOk = True
@@ -145,7 +187,7 @@ class mainWin(wx_windows.MainFrame):
         self.m_staticTextRef.SetLabel(testResult)
         wx.Yield()
 
-    def testAec(self):
+    def testAec(self, fromTestAll=False):
         global testResult, testAecOk
         try:
             self.hidWrapper.AecMic()
@@ -154,9 +196,20 @@ class mainWin(wx_windows.MainFrame):
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
+
+
         self.audioWrapper.setInputFile(Config.MUSIC_FILE)
-        self.audioWrapper.genOutput(Config.AEC_FILE)
+        if fromTestAll:
+            self.audioWrapper.genOutput(Config.AEC_FILE, self.isTestingAll)
+        else:
+            self.audioWrapper.genOutput(Config.AEC_FILE, True)
+
         self.audioWrapper.waitForFinish()
+
+        if fromTestAll and not self.isTestingAll:
+            wx.Yield()
+            return
+
         result = self.audioJudge.judgeLine(Config.AEC_FILE)
         print(result)
         if result == PASS_STR:

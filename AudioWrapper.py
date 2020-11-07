@@ -29,7 +29,7 @@ class AudioWrapper():
         data = self.readStream.read(CHUNK)
         # 录音不出问题，是一直可以录下去的。
         # 所以需要通过播放是否完成来控制是否继续录音。
-        while data and self.isPlaying:
+        while data and self.isPlaying and  self.testingFlag:
             # print("len:", len(data))
             self.readFrames.append(data)
             data = self.readStream.read(CHUNK)
@@ -66,7 +66,7 @@ class AudioWrapper():
         self.writeStream.start_stream()
         data = self.inputWaveFile.readframes(CHUNK)
 
-        while data:
+        while data and  self.testingFlag:
             self.writeStream.write(data)
             data = self.inputWaveFile.readframes(CHUNK)
 
@@ -75,7 +75,7 @@ class AudioWrapper():
         self.isPlaying = False
         self.inputWaveFile.close()
     # 用这个做对外接口。
-    def genOutput(self, outfile):
+    def genOutput(self, outfile, testingFlag):
         self.pa = pyaudio.PyAudio()
         self.writeStream = None
         self.readFrames = []
@@ -84,7 +84,7 @@ class AudioWrapper():
 
         self.outputFile = outfile
         self.open()
-
+        self.testingFlag = testingFlag
         self.play()
         self.record()
 
