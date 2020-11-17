@@ -13,6 +13,8 @@ import struct
 
 READ_POS=20000
 
+print = debug
+
 class AudioJudge():
     '''
     判断逻辑：
@@ -25,13 +27,13 @@ class AudioJudge():
 
     '''
     def judgeSine(self, filename, judgeValue):
-        print("--------judgeValue:", judgeValue)
+        print("比较基准值:{}".format(judgeValue))
         result = ''
         self.inputWaveFile = wave.open(filename)
         if not self.inputWaveFile:
             result = '打开' + filename + "失败"
             return result
-        print(self.inputWaveFile.getnframes())
+        # print(self.inputWaveFile.getnframes())
 
         try:
             self.inputWaveFile.setpos(READ_POS)
@@ -46,8 +48,8 @@ class AudioJudge():
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
-        print(max_val)
-        print(min_val)
+        print("最大值：{}".format(max_val))
+        print("最大值：{}".format(min_val))
         if max_val < judgeValue or abs(min_val) < judgeValue:
             result = '录音数据幅值太小'
             return result
@@ -85,8 +87,8 @@ class AudioJudge():
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
-        print(max_val)
-        print(min_val)
+        print("最大值：{}".format(max_val))
+        print("最大值：{}".format(min_val))
         if not (max_val < LINE_ABS_BASE and abs(min_val) < LINE_ABS_BASE):
             result = '降噪效果不好'
             return result

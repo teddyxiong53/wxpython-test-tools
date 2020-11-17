@@ -11,6 +11,7 @@ from Config import *
 
 import wx
 
+print = debug
 
 class AudioWrapper():
     def __init__(self):

@@ -76,6 +76,7 @@ class mainWin(wx_windows.MainFrame):
             self.m_bpButtonResult.SetBitmap(wx.Bitmap('./fail.bmp'))
         # 测试所有完成后，把标志设置一下。
         self.isTestingAll = False
+        self.m_buttonTestAll.SetLabelText(TEST_ALL_START)
         # 这里必须yield一下，不然测试过了，界面也不会刷新的。
         wx.Yield()
     '''
@@ -98,7 +99,7 @@ class mainWin(wx_windows.MainFrame):
             # 那么就把测试所有的按钮，在这里改成停止
             if self.isTestingAll:
                 self.m_buttonTestAll.SetLabelText(TEST_ALL_STOP)
-
+        debug('-------------------------测试左MIC')
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
         if fromTestAll:
@@ -129,6 +130,7 @@ class mainWin(wx_windows.MainFrame):
             # 出错了。然后就设置状态栏，返回
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
+        debug('--------------------------测试右MIC')
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
         if fromTestAll:
@@ -163,7 +165,7 @@ class mainWin(wx_windows.MainFrame):
             # 出错了。然后就设置状态栏，返回
             self.m_statusBar1.SetStatusText(OPEN_FAIL_STR)
             return
-
+        debug('-------------------------测试REF')
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
         if fromTestAll:
             self.audioWrapper.genOutput(Config.REF_FILE, self.isTestingAll)
@@ -197,7 +199,7 @@ class mainWin(wx_windows.MainFrame):
             return
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
 
-
+        debug('----------------------------测试AEC')
         self.audioWrapper.setInputFile(Config.MUSIC_FILE)
         if fromTestAll:
             self.audioWrapper.genOutput(Config.AEC_FILE, self.isTestingAll)
@@ -224,27 +226,27 @@ class mainWin(wx_windows.MainFrame):
         self.m_staticTextAec.SetLabel(testResult)
         wx.Yield()
     def OnButtonTestAll(self, event):
-        debug('test all')
+        debug('-----------------一键测试所有')
         self.testAll()
 
 
     def OnButtonLeftMic(self, event):
-        debug('test left mic')
+
         self.testLeftMic()
 
 
 
     def OnButtonRightMic(self, event):
-        debug('test right mic')
+
         self.testRightMic()
 
     def OnButtonRef(self, event):
-        debug('test ref ')
+
         self.testRef()
 
 
     def OnButtonAec(self, event):
-        debug('test aec')
+
         self.testAec()
 
 
