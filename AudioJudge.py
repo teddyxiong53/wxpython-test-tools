@@ -49,7 +49,7 @@ class AudioJudge():
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
-        print("最大值：{}".format(min_val))
+        print("最小值：{}".format(min_val))
         if max_val < judgeValue or abs(min_val) < judgeValue:
             result = '录音数据幅值太小'
             return result
@@ -88,7 +88,7 @@ class AudioJudge():
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
-        print("最大值：{}".format(min_val))
+        print("最小值：{}".format(min_val))
         if not (max_val < LINE_ABS_BASE and abs(min_val) < LINE_ABS_BASE):
             result = '降噪效果不好'
             return result
