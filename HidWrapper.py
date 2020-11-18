@@ -42,7 +42,7 @@ class HidWrapper:
             write_data[0] = value
             len = dev.send_feature_report(write_data,report_id=0x24)
             # len = dev.write(write_data)
-            print("write len:", len)
+            # print("write len:", len)
             time.sleep(0.05)
             dev.close()
         except:

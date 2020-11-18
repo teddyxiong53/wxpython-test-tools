@@ -43,16 +43,16 @@ def initConfig():
         param = json.load(f)
         # print(SINE_ABS_BASE)
         # print(param)
-        if param['SINE_ABS_BASE'] and 0 <= param['SINE_ABS_BASE'] <= 32767:
+        if param['SINE_ABS_BASE'] and 0 <= param['SINE_ABS_BASE'] <= 40000:
             SINE_ABS_BASE = param['SINE_ABS_BASE']
         else:
             print("SINE_ABS_BASE invalid:", param['SINE_ABS_BASE'])
-        if param['REF_SINE_ABS_BASE'] and 0 <= param['REF_SINE_ABS_BASE'] <= 32767:
+        if param['REF_SINE_ABS_BASE'] and 0 <= param['REF_SINE_ABS_BASE'] <= 40000:
             REF_SINE_ABS_BASE = param['REF_SINE_ABS_BASE']
         else:
             print("REF_SINE_ABS_BASE invalid:", param['REF_SINE_ABS_BASE'])
 
-        if param['LINE_ABS_BASE'] and 0 <= param['LINE_ABS_BASE'] <= 32767:
+        if param['LINE_ABS_BASE'] and 0 <= param['LINE_ABS_BASE'] <= 40000:
             LINE_ABS_BASE = param['LINE_ABS_BASE']
         else:
             print("LINE_ABS_BASE invalid:", param['LINE_ABS_BASE'])

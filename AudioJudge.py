@@ -7,7 +7,8 @@ import threading
 
 from logging import debug, error, info
 
-from Config import *
+import Config
+
 import wave
 import struct
 
@@ -89,7 +90,7 @@ class AudioJudge():
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
         print("最小值：{}".format(min_val))
-        if not (max_val < LINE_ABS_BASE and abs(min_val) < LINE_ABS_BASE):
+        if not (max_val < Config.LINE_ABS_BASE and abs(min_val) < Config.LINE_ABS_BASE):
             result = '降噪效果不好'
             return result
         return '正常'

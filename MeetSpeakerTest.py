@@ -64,6 +64,11 @@ class mainWin(wx_windows.MainFrame):
             # 需要进行停止操作
             wx.Yield()
             return
+        self.m_staticTextLeft.SetLabel("")
+        self.m_staticTextRight.SetLabel("")
+        self.m_staticTextRef.SetLabel("")
+        self.m_staticTextAec.SetLabel("")
+
         self.isTestingAll = True
         self.testLeftMic(True)
         self.testRightMic(True)
@@ -110,12 +115,12 @@ class mainWin(wx_windows.MainFrame):
         self.audioWrapper.waitForFinish()
         result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
-            testLeftOk = True
+            self.testLeftOk = True
         else:
-            testLeftOk = False
+            self.testLeftOk = False
         testResult = result
 
-        if testLeftOk:
+        if self.testLeftOk:
             self.m_staticTextLeft.SetBackgroundColour(wx.GREEN)
         else:
             self.m_staticTextLeft.SetBackgroundColour(wx.RED)
@@ -145,11 +150,11 @@ class mainWin(wx_windows.MainFrame):
 
         result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE)
         if result == PASS_STR:
-            testRightOk = True
+            self.testRightOk = True
         else:
-            testRightOk = False
+            self.testRightOk = False
         testResult = result
-        if testRightOk:
+        if self.testRightOk:
             self.m_staticTextRight.SetBackgroundColour(wx.GREEN)
         else:
             self.m_staticTextRight.SetBackgroundColour(wx.RED)
@@ -178,11 +183,11 @@ class mainWin(wx_windows.MainFrame):
             return
         result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE)
         if result == PASS_STR:
-            testRefOk = True
+            self.testRefOk = True
         else:
-            testRefOk = False
+            self.testRefOk = False
         testResult = result
-        if testRefOk:
+        if self.testRefOk:
             self.m_staticTextRef.SetBackgroundColour(wx.GREEN)
         else:
             self.m_staticTextRef.SetBackgroundColour(wx.RED)
@@ -215,11 +220,11 @@ class mainWin(wx_windows.MainFrame):
         result = self.audioJudge.judgeLine(Config.AEC_FILE)
         print(result)
         if result == PASS_STR:
-            testAecOk = True
+            self.testAecOk = True
         else:
-            testAecOk = False
+            self.testAecOk = False
         testResult = result
-        if testAecOk:
+        if self.testAecOk:
             self.m_staticTextAec.SetBackgroundColour(wx.GREEN)
         else:
             self.m_staticTextAec.SetBackgroundColour(wx.RED)
