@@ -301,7 +301,16 @@ class mainWin(wx_windows.MainFrame):
         dialogAbout.m_staticText1.SetLabel(Config.SOFTWARE_NAME+Config.SOFTWARE_VERSION+'\n'+Config.SOFTWARE_AUTHOR)
         dialogAbout.ShowModal()
 
+    def OnOpenLog( self, event ):
+        if os.path.exists('test-tools.log'):
+            os.system("notepad.exe test-tools.log")
 
+    def OnOpenParam( self, event ):
+        if os.path.exists('param.json'):
+            os.system("notepad.exe param.json")
+    def OnClearLog( self, event ):
+        if os.path.exists('test-tools.log'):
+            open("test-tools.log", 'w').close() # 这一行代码就是清空文件
 
 def initLog():
     logging.basicConfig(filename='test-tools.log', level=logging.DEBUG, format=Config.LOG_FORMAT)

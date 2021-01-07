@@ -24,6 +24,15 @@ class MainFrame ( wx.Frame ):
 		self.m_statusBar1 = self.CreateStatusBar( 1, wx.STB_SIZEGRIP, wx.ID_ANY )
 		self.m_menubar1 = wx.MenuBar( 0 )
 		self.m_menu1 = wx.Menu()
+		self.m_menuItemOpenParam = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"打开参数文件", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu1.Append( self.m_menuItemOpenParam )
+
+		self.m_menuItemOpenLog = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"打开日志文件", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu1.Append( self.m_menuItemOpenLog )
+
+		self.m_menuItemClearLog = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"清空日志文件", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu1.Append( self.m_menuItemClearLog )
+
 		self.m_menuItemExit = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"退出", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu1.Append( self.m_menuItemExit )
 
@@ -111,6 +120,9 @@ class MainFrame ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_CLOSE, self.OnClose )
+		self.Bind( wx.EVT_MENU, self.OnOpenParam, id = self.m_menuItemOpenParam.GetId() )
+		self.Bind( wx.EVT_MENU, self.OnOpenLog, id = self.m_menuItemOpenLog.GetId() )
+		self.Bind( wx.EVT_MENU, self.OnClearLog, id = self.m_menuItemClearLog.GetId() )
 		self.Bind( wx.EVT_MENU, self.OnMenuExit, id = self.m_menuItemExit.GetId() )
 		self.Bind( wx.EVT_MENU, self.OnMenuAbout, id = self.m_menuItemAbout.GetId() )
 		self.m_buttonTestAll.Bind( wx.EVT_BUTTON, self.OnButtonTestAll )
@@ -126,6 +138,15 @@ class MainFrame ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def OnClose( self, event ):
+		event.Skip()
+
+	def OnOpenParam( self, event ):
+		event.Skip()
+
+	def OnOpenLog( self, event ):
+		event.Skip()
+
+	def OnClearLog( self, event ):
 		event.Skip()
 
 	def OnMenuExit( self, event ):
