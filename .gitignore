@@ -9,4 +9,4 @@ output.log
 test.py
 dist.zip
 *.spec
-
+plot.png

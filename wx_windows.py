@@ -17,7 +17,7 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"会议音箱测试程序V1.0", pos = wx.DefaultPosition, size = wx.Size( 600,400 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"会议音箱测试程序V1.0", pos = wx.DefaultPosition, size = wx.Size( 700,400 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.Size( -1,-1 ), wx.Size( -1,-1 ) )
 
@@ -49,6 +49,9 @@ class MainFrame ( wx.Frame ):
 		self.m_bpButtonResult.SetBitmap( wx.Bitmap( u"before_test.bmp", wx.BITMAP_TYPE_ANY ) )
 		bSizer21.Add( self.m_bpButtonResult, 0, wx.ALL, 5 )
 
+		self.m_buttonShowPic = wx.Button( self, wx.ID_ANY, u"查看波形", wx.DefaultPosition, wx.Size( 80,50 ), 0 )
+		bSizer21.Add( self.m_buttonShowPic, 0, wx.ALL, 5 )
+
 
 		bSizer2.Add( bSizer21, 1, wx.EXPAND, 5 )
 
@@ -57,7 +60,7 @@ class MainFrame ( wx.Frame ):
 		self.m_buttonLeftMic = wx.Button( self, wx.ID_ANY, u"测试左MIC", wx.Point( -1,-1 ), wx.Size( 100,50 ), 0 )
 		gSizer2.Add( self.m_buttonLeftMic, 0, wx.ALL, 5 )
 
-		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.Point( -1,-1 ), wx.Size( -1,-1 ), 0 )
+		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.Point( -1,-1 ), wx.Size( -1,-1 ), wx.ALIGN_LEFT )
 		self.m_staticTextLeft.Wrap( -1 )
 
 		self.m_staticTextLeft.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
@@ -77,7 +80,7 @@ class MainFrame ( wx.Frame ):
 		self.m_buttonRef = wx.Button( self, wx.ID_ANY, u"测试REF", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
 		gSizer2.Add( self.m_buttonRef, 0, wx.ALL, 5 )
 
-		self.m_staticTextRef = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticTextRef = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_LEFT )
 		self.m_staticTextRef.Wrap( -1 )
 
 		self.m_staticTextRef.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
@@ -111,6 +114,7 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.OnMenuExit, id = self.m_menuItemExit.GetId() )
 		self.Bind( wx.EVT_MENU, self.OnMenuAbout, id = self.m_menuItemAbout.GetId() )
 		self.m_buttonTestAll.Bind( wx.EVT_BUTTON, self.OnButtonTestAll )
+		self.m_buttonShowPic.Bind( wx.EVT_BUTTON, self.OnButtonShowPic )
 		self.m_buttonLeftMic.Bind( wx.EVT_BUTTON, self.OnButtonLeftMic )
 		self.m_buttonRightMic.Bind( wx.EVT_BUTTON, self.OnButtonRightMic )
 		self.m_buttonRef.Bind( wx.EVT_BUTTON, self.OnButtonRef )
@@ -131,6 +135,9 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 
 	def OnButtonTestAll( self, event ):
+		event.Skip()
+
+	def OnButtonShowPic( self, event ):
 		event.Skip()
 
 	def OnButtonLeftMic( self, event ):

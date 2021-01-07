@@ -12,7 +12,9 @@ import Config
 
 import sys, os
 
-
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 
@@ -161,6 +163,34 @@ class mainWin(wx_windows.MainFrame):
         self.m_staticTextRight.SetLabel(testResult)
         wx.Yield()
 
+    def showPic(self):
+        # 先杀掉所有的看图进程。
+        # 把图片画好。
+        # 然后显示其中一张，可以左右来查看。
+        # return
+        from AudioJudge import left_y_data, right_y_data, ref_y_data, aec_y_data
+        #解决中文显示问题
+        plt.rcParams['font.sans-serif']=['SimHei']
+        plt.rcParams['axes.unicode_minus'] = False
+        plt.title('测试结果音频波形')
+
+        plt.subplot(2,2,1, title='左mic')
+        plt.plot(left_y_data)
+
+
+        plt.subplot(2,2,2, title='右mic')
+        plt.plot(right_y_data)
+
+
+        plt.subplot(2,2,3, title='ref信号')
+        plt.plot(ref_y_data)
+
+        plt.subplot(2,2,4, title='AEC')
+        plt.plot(aec_y_data)
+
+        plt.savefig('plot.png', dpi=100)
+        plt.close()
+        os.system("explorer.exe plot.png")
 
     def testRef(self, fromTestAll=False):
         global testResult, testRefOk
@@ -249,6 +279,8 @@ class mainWin(wx_windows.MainFrame):
 
         self.testRef()
 
+    def OnButtonShowPic( self, event ):
+        self.showPic()
 
     def OnButtonAec(self, event):
 

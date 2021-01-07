@@ -16,6 +16,12 @@ READ_POS=20000
 
 print = debug
 
+left_y_data = []
+right_y_data = []
+ref_y_data = []
+aec_y_data = []
+
+
 class AudioJudge():
     '''
     判断逻辑：
@@ -28,6 +34,7 @@ class AudioJudge():
 
     '''
     def judgeSine(self, filename, judgeValue):
+        global left_y_data, right_y_data, ref_y_data
         print("比较基准值:{}".format(judgeValue))
         result = ''
         self.inputWaveFile = wave.open(filename)
@@ -46,13 +53,22 @@ class AudioJudge():
         # 取到数据后，需要大小端转换。
         # 得到的是一个元组。
         unpacked_data = struct.unpack("<16h", data)
+        if filename.find('left.wav') != -1:
+            left_y_data = unpacked_data
+        elif filename.find('right.wav') != -1:
+            right_y_data = unpacked_data
+        elif filename.find('ref.wav') != -1:
+            ref_y_data = unpacked_data
+
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
         print("最小值：{}".format(min_val))
         if max_val < judgeValue or abs(min_val) < judgeValue:
-            result = '录音数据幅值太小'
+            result = '幅值太小({},{})'.format(min_val,max_val)
+            if filename.find('ref.wav') != -1 and max_val<5:
+                result += ',FL123问题'
             return result
         # 判断是否有截顶。
         for i in range(15):
@@ -81,17 +97,19 @@ class AudioJudge():
             print("set pos fail")
             result = '文件'+ filename + '大小不对'
             return result
-        data = self.inputWaveFile.readframes(48000)
+        data = self.inputWaveFile.readframes(160000) #除以16000，就是秒数。现在取10s。
         # 取到数据后，需要大小端转换。
         # 得到的是一个元组。
-        unpacked_data = struct.unpack("<48000h", data)
+        unpacked_data = struct.unpack("<160000h", data)
+        global aec_y_data
+        aec_y_data = unpacked_data
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
         print("最小值：{}".format(min_val))
         if not (max_val < Config.LINE_ABS_BASE and abs(min_val) < Config.LINE_ABS_BASE):
-            result = '降噪效果不好'
+            result = '降噪不好({},{})'.format(min_val,max_val)
             return result
         return '正常'
 
