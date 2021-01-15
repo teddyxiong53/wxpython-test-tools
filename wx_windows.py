@@ -64,50 +64,70 @@ class MainFrame ( wx.Frame ):
 
 		bSizer2.Add( bSizer21, 1, wx.EXPAND, 5 )
 
-		gSizer2 = wx.GridSizer( 4, 2, 0, 0 )
+		bSizer4 = wx.BoxSizer( wx.VERTICAL )
+
+		gSizer2 = wx.GridSizer( 0, 5, 0, 0 )
 
 		self.m_buttonLeftMic = wx.Button( self, wx.ID_ANY, u"测试左MIC", wx.Point( -1,-1 ), wx.Size( 100,50 ), 0 )
 		gSizer2.Add( self.m_buttonLeftMic, 0, wx.ALL, 5 )
 
-		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.Point( -1,-1 ), wx.Size( -1,-1 ), wx.ALIGN_LEFT )
+		self.m_staticTextLeft = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.Point( -1,-1 ), wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_LEFT )
 		self.m_staticTextLeft.Wrap( -1 )
 
 		self.m_staticTextLeft.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
 		gSizer2.Add( self.m_staticTextLeft, 0, wx.ALL, 5 )
 
+
+		bSizer4.Add( gSizer2, 1, wx.EXPAND, 5 )
+
+		gSizer3 = wx.GridSizer( 0, 5, 0, 0 )
+
 		self.m_buttonRightMic = wx.Button( self, wx.ID_ANY, u"测试右MIC", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
-		gSizer2.Add( self.m_buttonRightMic, 0, wx.ALL, 5 )
+		gSizer3.Add( self.m_buttonRightMic, 0, wx.ALL, 5 )
 
 		self.m_staticTextRight = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTextRight.Wrap( -1 )
 
 		self.m_staticTextRight.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
-		gSizer2.Add( self.m_staticTextRight, 0, wx.ALL, 5 )
+		gSizer3.Add( self.m_staticTextRight, 0, wx.ALL, 5 )
+
+
+		bSizer4.Add( gSizer3, 1, wx.EXPAND, 5 )
+
+		gSizer4 = wx.GridSizer( 0, 5, 0, 0 )
 
 		self.m_buttonRef = wx.Button( self, wx.ID_ANY, u"测试REF", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
-		gSizer2.Add( self.m_buttonRef, 0, wx.ALL, 5 )
+		gSizer4.Add( self.m_buttonRef, 0, wx.ALL, 5 )
 
 		self.m_staticTextRef = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_LEFT )
 		self.m_staticTextRef.Wrap( -1 )
 
 		self.m_staticTextRef.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
-		gSizer2.Add( self.m_staticTextRef, 0, wx.ALL, 5 )
+		gSizer4.Add( self.m_staticTextRef, 0, wx.ALL, 5 )
+
+
+		bSizer4.Add( gSizer4, 1, wx.EXPAND, 5 )
+
+		gSizer5 = wx.GridSizer( 0, 5, 0, 0 )
 
 		self.m_buttonAec = wx.Button( self, wx.ID_ANY, u"测试AEC", wx.DefaultPosition, wx.Size( 100,50 ), 0 )
-		gSizer2.Add( self.m_buttonAec, 0, wx.ALL, 5 )
+		gSizer5.Add( self.m_buttonAec, 0, wx.ALL, 5 )
 
 		self.m_staticTextAec = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTextAec.Wrap( -1 )
 
 		self.m_staticTextAec.SetFont( wx.Font( 18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "宋体" ) )
 
-		gSizer2.Add( self.m_staticTextAec, 0, wx.ALL, 5 )
+		gSizer5.Add( self.m_staticTextAec, 0, wx.ALL, 5 )
 
 
-		bSizer2.Add( gSizer2, 1, wx.EXPAND, 5 )
+		bSizer4.Add( gSizer5, 1, wx.EXPAND, 5 )
+
+
+		bSizer2.Add( bSizer4, 1, wx.EXPAND, 5 )
 
 
 		self.SetSizer( bSizer2 )

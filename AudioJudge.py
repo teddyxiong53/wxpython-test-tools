@@ -11,6 +11,7 @@ import Config
 
 import wave
 import struct
+import math
 
 READ_POS=20000
 
@@ -59,7 +60,20 @@ class AudioJudge():
             right_y_data = unpacked_data
         elif filename.find('ref.wav') != -1:
             ref_y_data = unpacked_data
-
+        # 计算db值。
+        # 算rms均方根值。
+        db_val = 0
+        for v in unpacked_data:
+            print("v:{}".format(v))
+            db_val += abs(v)*abs(v)
+        print('sum:{}'.format(db_val))
+        db_val = db_val/16
+        # 然后开方
+        db_val = math.sqrt(db_val)
+        # 然后求对数。
+        db_val = 20* math.log(db_val/32767,10)
+        # 保留一位小数就好了
+        db_val = round(db_val, 1)
         # print(unpacked_data)
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
@@ -69,6 +83,8 @@ class AudioJudge():
             result = '幅值太小({},{})'.format(min_val,max_val)
             if filename.find('ref.wav') != -1 and max_val<5:
                 result += ',FL123问题'
+            else:
+                result += ',{}dB'.format(db_val)
             return result
         # 判断是否有截顶。
         for i in range(15):
@@ -77,6 +93,7 @@ class AudioJudge():
                 result = '有截顶'
                 return result
         result = '正常'
+        result += ',{}dB'.format(db_val)
         return result
 
     '''

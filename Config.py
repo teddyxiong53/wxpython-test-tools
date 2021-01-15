@@ -3,7 +3,7 @@
 import pyaudio
 import json
 # 版本号
-SOFTWARE_VERSION = "V1.8"
+SOFTWARE_VERSION = "V1.9"
 SOFTWARE_NAME = "DOSS会议音箱测试软件"
 SOFTWARE_AUTHOR = "熊汉良"
 
@@ -36,13 +36,17 @@ REF_SINE_ABS_BASE=10000
 
 # AEC的判断，不能大于这个值，大于则说明降噪效果不好。
 LINE_ABS_BASE=1000
+PCBA = False
 
 def initConfig():
-    global SINE_ABS_BASE, LINE_ABS_BASE,REF_SINE_ABS_BASE
+    global SINE_ABS_BASE, LINE_ABS_BASE,REF_SINE_ABS_BASE, PCBA
     with open('param.json') as f:
         param = json.load(f)
         # print(SINE_ABS_BASE)
         # print(param)
+
+        PCBA = param['PCBA']
+        print('pcba value:', PCBA)
         if param['SINE_ABS_BASE'] and 0 <= param['SINE_ABS_BASE'] <= 40000:
             SINE_ABS_BASE = param['SINE_ABS_BASE']
         else:

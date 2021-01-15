@@ -225,6 +225,8 @@ class mainWin(wx_windows.MainFrame):
         wx.Yield()
 
     def testAec(self, fromTestAll=False):
+        if Config.PCBA:
+            return
         global testResult, testAecOk
         try:
             self.hidWrapper.AecMic()
@@ -338,7 +340,11 @@ if __name__ == '__main__':
     # app = wx.App(redirect=True, filename="output.log")
     app = wx.App()
     main_win = mainWin(None)
-    main_win.SetTitle(Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION)
+    if Config.PCBA:
+        title = Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION + '-PCBA版本'
+    else:
+        title = Config.SOFTWARE_NAME + Config.SOFTWARE_VERSION + '-整机版本'
+    main_win.SetTitle(title)
     main_win.Show()
     main_win.initSystem()
     app.MainLoop()
