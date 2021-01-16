@@ -3,7 +3,7 @@
 import pyaudio
 import json
 # 版本号
-SOFTWARE_VERSION = "V1.9"
+SOFTWARE_VERSION = "V2.0"
 SOFTWARE_NAME = "DOSS会议音箱测试软件"
 SOFTWARE_AUTHOR = "熊汉良"
 

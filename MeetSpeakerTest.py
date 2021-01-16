@@ -116,7 +116,7 @@ class mainWin(wx_windows.MainFrame):
 
         self.audioWrapper.waitForFinish()
         result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE)
-        if result == PASS_STR:
+        if result.find(PASS_STR) != -1:
             self.testLeftOk = True
         else:
             self.testLeftOk = False
@@ -151,7 +151,7 @@ class mainWin(wx_windows.MainFrame):
             return
 
         result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE)
-        if result == PASS_STR:
+        if result.find(PASS_STR) != -1:
             self.testRightOk = True
         else:
             self.testRightOk = False
@@ -212,7 +212,7 @@ class mainWin(wx_windows.MainFrame):
             wx.Yield()
             return
         result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE)
-        if result == PASS_STR:
+        if result.find(PASS_STR) != -1:
             self.testRefOk = True
         else:
             self.testRefOk = False
@@ -251,7 +251,7 @@ class mainWin(wx_windows.MainFrame):
 
         result = self.audioJudge.judgeLine(Config.AEC_FILE)
         print(result)
-        if result == PASS_STR:
+        if result.find(PASS_STR) != -1:
             self.testAecOk = True
         else:
             self.testAecOk = False

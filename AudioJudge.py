@@ -60,13 +60,28 @@ class AudioJudge():
             right_y_data = unpacked_data
         elif filename.find('ref.wav') != -1:
             ref_y_data = unpacked_data
+        # 先判断波形是否符合正弦波规律，不符合，就直接返回，后面的判断也就不用做了。
+        sign_change_times = 0 # 数值符号改变的次数，一个完整正常的正弦波，符号只变化两次。多了少了，多说明波形不是正常的正弦波。
+        # 实测发现，变化一次的也是正常的。
+        for i in range(15):
+            a = unpacked_data[i]
+            b = unpacked_data[i+1]
+            # print('{}:{}'.format(a,b))
+            if a == 0 or b==0:
+                print("some value is zero:a:{},b:{}".format(a,b))
+            if a*b < 0:
+                sign_change_times += 1
+        if not (sign_change_times == 2 or sign_change_times == 1):
+            result = "波形畸变，有问题：{}".format(sign_change_times)
+            return result
+
         # 计算db值。
         # 算rms均方根值。
         db_val = 0
+
         for v in unpacked_data:
-            print("v:{}".format(v))
             db_val += abs(v)*abs(v)
-        print('sum:{}'.format(db_val))
+        # print('sum:{}'.format(db_val))
         db_val = db_val/16
         # 然后开方
         db_val = math.sqrt(db_val)
@@ -75,6 +90,8 @@ class AudioJudge():
         # 保留一位小数就好了
         db_val = round(db_val, 1)
         # print(unpacked_data)
+
+
         max_val = max(unpacked_data)
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
