@@ -15,7 +15,7 @@ import sys, os
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
+from FileEventHandler import startFileMonitor, stopFileMonitor
 
 
 testResult = ''
@@ -293,6 +293,7 @@ class mainWin(wx_windows.MainFrame):
     def OnClose(self, event):
         debug('关闭软件')
         self.audioWrapper.close()
+        stopFileMonitor()
         wx.Exit()
 
     def OnMenuExit(self, event):
@@ -308,8 +309,8 @@ class mainWin(wx_windows.MainFrame):
             os.system("notepad.exe test-tools.log")
 
     def OnOpenParam( self, event ):
-        if os.path.exists('param.json'):
-            os.system("notepad.exe param.json")
+        if os.path.exists('config/param.json'):
+            os.system("notepad.exe config/param.json")
     def OnClearLog( self, event ):
         if os.path.exists('test-tools.log'):
             open("test-tools.log", 'w').close() # 这一行代码就是清空文件
@@ -347,4 +348,6 @@ if __name__ == '__main__':
     main_win.SetTitle(title)
     main_win.Show()
     main_win.initSystem()
+    # 启动文件变化监听
+    startFileMonitor('./config')
     app.MainLoop()

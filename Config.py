@@ -37,16 +37,21 @@ REF_SINE_ABS_BASE=10000
 # AEC的判断，不能大于这个值，大于则说明降噪效果不好。
 LINE_ABS_BASE=1000
 PCBA = False
+WAV_100HZ = False
+WAV_300HZ = False
 
 def initConfig():
     global SINE_ABS_BASE, LINE_ABS_BASE,REF_SINE_ABS_BASE, PCBA
-    with open('param.json') as f:
+    with open('config/param.json') as f:
         param = json.load(f)
         # print(SINE_ABS_BASE)
         # print(param)
 
         PCBA = param['PCBA']
         print('pcba value:', PCBA)
+        WAV_100HZ = param['WAV_100HZ']
+        WAV_300HZ = param['WAV_300HZ']
+
         if param['SINE_ABS_BASE'] and 0 <= param['SINE_ABS_BASE'] <= 40000:
             SINE_ABS_BASE = param['SINE_ABS_BASE']
         else:
