@@ -34,7 +34,7 @@ class AudioJudge():
     seek到20000。读取32个字节数据。就是一个周期的数据。
 
     '''
-    def judgeSine(self, filename, judgeValue):
+    def judgeSine(self, filename, judgeValue, rate):
         global left_y_data, right_y_data, ref_y_data
         print("比较基准值:{}".format(judgeValue))
         result = ''
@@ -43,17 +43,44 @@ class AudioJudge():
             result = '打开' + filename + "失败"
             return result
         # print(self.inputWaveFile.getnframes())
-
+        read_pos = READ_POS
+        read_size = 16
+        if filename.find('100hz.wav') != -1:
+            read_pos = READ_POS
+            read_size = 160
+        elif filename.find('300hz.wav') != -1:
+            read_pos = READ_POS
+            read_size = 160 # 统一都读取160个点。这样100hz和300hz，都可以保证至少有一个完整的正弦波。
         try:
-            self.inputWaveFile.setpos(READ_POS)
+            self.inputWaveFile.setpos(read_pos)
         except:
             print("set pos fail")
             result = '录音文件大小不对'
             return result
-        data = self.inputWaveFile.readframes(16)
+        data = self.inputWaveFile.readframes(read_size)
         # 取到数据后，需要大小端转换。
         # 得到的是一个元组。
-        unpacked_data = struct.unpack("<16h", data)
+        parse_fmt = '<{}h'.format(read_size)
+        unpacked_data = struct.unpack(parse_fmt, data)
+        # print('----------------{}'.format(filename))
+        # print(unpacked_data)
+        # 对于100hz和300hz的，只看最大值和最小值。
+        if filename.find('00hz.wav') != -1:
+            max_val = max(unpacked_data)
+            min_val = min(unpacked_data)
+            print("最大值：{}".format(max_val))
+            print("最小值：{}".format(min_val))
+            if max_val < judgeValue or abs(min_val) < judgeValue:
+                result = '幅值太小({},{})'.format(min_val,max_val)
+                return result
+            # 判断是否有截顶。
+            for i in range(15):
+                # print(i)
+                if unpacked_data[i] == unpacked_data[i+1]:
+                    result = '有截顶'
+                    return result
+            return '正常'
+
         if filename.find('left.wav') != -1:
             left_y_data = unpacked_data
         elif filename.find('right.wav') != -1:

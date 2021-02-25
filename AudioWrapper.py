@@ -18,12 +18,12 @@ class AudioWrapper():
         pass
 
 
-    def record(self):
-        self.recordThread = threading.Thread(target=self.recordThreadProc)
+    def record(self,rate):
+        self.recordThread = threading.Thread(target=self.recordThreadProc,args=(rate,))
         self.recordThread.start()
         print("begin record")
         
-    def recordThreadProc(self):
+    def recordThreadProc(self, rate):
         # 先清空，这个是为了保证反复录音的时候，数据正常。
         self.readFrames = []
         self.readStream.start_stream()
@@ -46,7 +46,7 @@ class AudioWrapper():
             return
         self.outputWaveFile.setnchannels(CHANNELS)
         self.outputWaveFile.setsampwidth(self.pa.get_sample_size(FORMAT))
-        self.outputWaveFile.setframerate(RATE)
+        self.outputWaveFile.setframerate(rate)
         self.outputWaveFile.writeframes(b''.join(self.readFrames))
         self.outputWaveFile.close()
         print('end of write output wav file')
@@ -76,7 +76,8 @@ class AudioWrapper():
         self.isPlaying = False
         self.inputWaveFile.close()
     # 用这个做对外接口。
-    def genOutput(self, outfile, testingFlag):
+    # rate统一只用16000的。
+    def genOutput(self, outfile, testingFlag, rate=16000):
         self.pa = pyaudio.PyAudio()
         self.writeStream = None
         self.readFrames = []
@@ -84,10 +85,10 @@ class AudioWrapper():
         self.isPlaying = False
 
         self.outputFile = outfile
-        self.open()
+        self.open(rate)
         self.testingFlag = testingFlag
         self.play()
-        self.record()
+        self.record(rate)
 
     def waitForFinish(self):
         self.playThread.join()
@@ -108,11 +109,11 @@ class AudioWrapper():
     def setInputFile(self, filename):
         self.inputFile = filename
 
-    def open(self):
+    def open(self, rate):
         self.writeStream = self.pa.open(
             format=FORMAT,
             channels=CHANNELS,
-            rate=RATE,
+            rate=rate,
             # input=True,
             output=True,
             frames_per_buffer=CHUNK
@@ -120,7 +121,7 @@ class AudioWrapper():
         self.readStream = self.pa.open(
             format=FORMAT,
             channels=CHANNELS,
-            rate=RATE,
+            rate=rate,
             input=True,
             # output=True,
             frames_per_buffer=CHUNK

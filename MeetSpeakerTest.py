@@ -108,19 +108,50 @@ class mainWin(wx_windows.MainFrame):
                 self.m_buttonTestAll.SetLabelText(TEST_ALL_STOP)
         debug('-------------------------测试左MIC')
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
+
+        # 先测试16000的
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
         if fromTestAll:
-            self.audioWrapper.genOutput(Config.LEFT_FILE, self.isTestingAll)
+            self.audioWrapper.genOutput(Config.LEFT_FILE, self.isTestingAll,16000)
         else:
-            self.audioWrapper.genOutput(Config.LEFT_FILE, True)
+            self.audioWrapper.genOutput(Config.LEFT_FILE, True, 16000)
 
         self.audioWrapper.waitForFinish()
-        result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE)
-        if result.find(PASS_STR) != -1:
+        result = self.audioJudge.judgeSine(Config.LEFT_FILE, Config.SINE_ABS_BASE, 16000)
+
+        # 再测试100hz的
+        if Config.WAV_100HZ:
+            self.audioWrapper.setInputFile(Config.INPUT_FILE_100HZ)
+            if fromTestAll:
+                self.audioWrapper.genOutput(Config.LEFT_FILE_100HZ, self.isTestingAll,16000)
+            else:
+                self.audioWrapper.genOutput(Config.LEFT_FILE_100HZ, True, 16000)
+
+            self.audioWrapper.waitForFinish()
+            result_100hz = self.audioJudge.judgeSine(Config.LEFT_FILE_100HZ, Config.SINE_ABS_BASE, 16000)
+        else:
+            result_100hz = ''
+        # 再测试300hz的
+        if Config.WAV_300HZ:
+            self.audioWrapper.setInputFile(Config.INPUT_FILE_300HZ)
+            if fromTestAll:
+                self.audioWrapper.genOutput(Config.LEFT_FILE_300HZ, self.isTestingAll,16000)
+            else:
+                self.audioWrapper.genOutput(Config.LEFT_FILE_300HZ, True, 16000)
+
+            self.audioWrapper.waitForFinish()
+            result_300hz = self.audioJudge.judgeSine(Config.LEFT_FILE_300HZ, Config.SINE_ABS_BASE, 16000)
+        else:
+            result_300hz = ''
+
+        # 判断结果
+        if result.find(PASS_STR) != -1 and \
+                (result_100hz.find(PASS_STR) != -1 or not Config.WAV_100HZ)and \
+                (result_300hz.find(PASS_STR) != -1 or not Config.WAV_300HZ):
             self.testLeftOk = True
         else:
             self.testLeftOk = False
-        testResult = result
+        testResult = result + ',' + result_100hz + ',' + result_300hz
 
         if self.testLeftOk:
             self.m_staticTextLeft.SetBackgroundColour(wx.GREEN)
@@ -139,23 +170,51 @@ class mainWin(wx_windows.MainFrame):
             return
         debug('--------------------------测试右MIC')
         self.m_statusBar1.SetStatusText(OPEN_OK_STR)
+
+        # 先测试16000的
         self.audioWrapper.setInputFile(Config.INPUT_FILE)
         if fromTestAll:
-            self.audioWrapper.genOutput(Config.RIGHT_FILE, self.isTestingAll)
+            self.audioWrapper.genOutput(Config.RIGHT_FILE, self.isTestingAll,16000)
         else:
-            self.audioWrapper.genOutput(Config.RIGHT_FILE, True)
+            self.audioWrapper.genOutput(Config.RIGHT_FILE, True, 16000)
 
         self.audioWrapper.waitForFinish()
-        if fromTestAll and not self.isTestingAll:
-            wx.Yield()
-            return
+        result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE, 16000)
 
-        result = self.audioJudge.judgeSine(Config.RIGHT_FILE, Config.SINE_ABS_BASE)
-        if result.find(PASS_STR) != -1:
+        # 再测试100hz的
+        if Config.WAV_100HZ:
+            self.audioWrapper.setInputFile(Config.INPUT_FILE_100HZ)
+            if fromTestAll:
+                self.audioWrapper.genOutput(Config.RIGHT_FILE_100HZ, self.isTestingAll,16000)
+            else:
+                self.audioWrapper.genOutput(Config.RIGHT_FILE_100HZ, True, 16000)
+
+            self.audioWrapper.waitForFinish()
+            result_100hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_100HZ, Config.SINE_ABS_BASE, 16000)
+        else:
+            result_100hz = ''
+        # 再测试300hz的
+        if Config.WAV_300HZ:
+            self.audioWrapper.setInputFile(Config.INPUT_FILE_300HZ)
+            if fromTestAll:
+                self.audioWrapper.genOutput(Config.RIGHT_FILE_300HZ, self.isTestingAll,16000)
+            else:
+                self.audioWrapper.genOutput(Config.RIGHT_FILE_300HZ, True, 16000)
+
+            self.audioWrapper.waitForFinish()
+            result_300hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_300HZ, Config.SINE_ABS_BASE, 16000)
+        else:
+            result_300hz = ''
+
+        # 判断结果
+        if result.find(PASS_STR) != -1 and \
+                (result_100hz.find(PASS_STR) != -1 or not Config.WAV_100HZ)and \
+                (result_300hz.find(PASS_STR) != -1 or not Config.WAV_300HZ):
             self.testRightOk = True
         else:
             self.testRightOk = False
-        testResult = result
+        testResult = result + ',' + result_100hz + ',' + result_300hz
+
         if self.testRightOk:
             self.m_staticTextRight.SetBackgroundColour(wx.GREEN)
         else:
@@ -211,7 +270,7 @@ class mainWin(wx_windows.MainFrame):
         if fromTestAll and not self.isTestingAll:
             wx.Yield()
             return
-        result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE)
+        result = self.audioJudge.judgeSine(Config.REF_FILE, Config.REF_SINE_ABS_BASE, 16000)
         if result.find(PASS_STR) != -1:
             self.testRefOk = True
         else:

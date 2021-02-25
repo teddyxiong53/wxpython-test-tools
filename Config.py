@@ -3,7 +3,7 @@
 import pyaudio
 import json
 # 版本号
-SOFTWARE_VERSION = "V2.0"
+SOFTWARE_VERSION = "V2.1"
 SOFTWARE_NAME = "DOSS会议音箱测试软件"
 SOFTWARE_AUTHOR = "熊汉良"
 
@@ -14,12 +14,20 @@ LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 AUDIO_OUTPUT_DIR='./audio_output'
 
 LEFT_FILE=AUDIO_OUTPUT_DIR+'/left.wav'
+LEFT_FILE_100HZ=AUDIO_OUTPUT_DIR+'/left_100hz.wav'
+LEFT_FILE_300HZ=AUDIO_OUTPUT_DIR+'/left_300hz.wav'
+
 RIGHT_FILE=AUDIO_OUTPUT_DIR+'/right.wav'
+RIGHT_FILE_100HZ=AUDIO_OUTPUT_DIR+'/right_100hz.wav'
+RIGHT_FILE_300HZ=AUDIO_OUTPUT_DIR+'/right_300hz.wav'
+
 REF_FILE=AUDIO_OUTPUT_DIR+'/ref.wav'
 AEC_FILE=AUDIO_OUTPUT_DIR+'/aec.wav'
 
 MUSIC_FILE='music.wav'
 INPUT_FILE="input.wav"
+INPUT_FILE_100HZ="100hz.wav"
+INPUT_FILE_300HZ="300hz.wav"
 
 # 音频配置
 CHUNK=1024
@@ -41,7 +49,7 @@ WAV_100HZ = False
 WAV_300HZ = False
 
 def initConfig():
-    global SINE_ABS_BASE, LINE_ABS_BASE,REF_SINE_ABS_BASE, PCBA
+    global SINE_ABS_BASE, LINE_ABS_BASE,REF_SINE_ABS_BASE, PCBA, WAV_100HZ, WAV_300HZ
     with open('config/param.json') as f:
         param = json.load(f)
         # print(SINE_ABS_BASE)

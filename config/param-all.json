@@ -1,5 +1,5 @@
 {
-  "PCBA": true,
+  "PCBA": false,
   "SINE_ABS_BASE": 1500,
   "REF_SINE_ABS_BASE": 4000,
   "LINE_ABS_BASE": 1000,
