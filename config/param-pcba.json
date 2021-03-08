@@ -1,10 +1,12 @@
 {
   "PCBA": true,
-  "SINE_ABS_BASE": 1500,
-  "REF_SINE_ABS_BASE": 4000,
-  "LINE_ABS_BASE": 1000,
+  "SINE_ABS_BASE": -29.8,
+  "SINE_ABS_BASE_100HZ": -38.0,
+  "SINE_ABS_BASE_300HZ": -29.8,
+  "REF_SINE_ABS_BASE": -20.0,
+  "LINE_ABS_BASE": 3000,
+  "LINE_POINTS": 1000,
   "WAV_100HZ": false,
   "WAV_300HZ": false
 }
-
 

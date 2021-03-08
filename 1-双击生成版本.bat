@@ -2,7 +2,7 @@
 chcp 65001
 
 
-set version="2.1"
+set version="2.2"
 
 set dir_prefix="会议音箱测试程序V"
 set dir_suffix_pcba="-PCBA版本"
@@ -38,6 +38,7 @@ copy before_test.bmp dist
 copy ok.bmp dist
 copy fail.bmp dist
 copy 使用说明.txt dist
+copy 版本说明.md dist
 mkdir dist\config
 xcopy /E config dist\config
 

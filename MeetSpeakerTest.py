@@ -128,7 +128,7 @@ class mainWin(wx_windows.MainFrame):
                 self.audioWrapper.genOutput(Config.LEFT_FILE_100HZ, True, 16000)
 
             self.audioWrapper.waitForFinish()
-            result_100hz = self.audioJudge.judgeSine(Config.LEFT_FILE_100HZ, Config.SINE_ABS_BASE, 16000)
+            result_100hz = self.audioJudge.judgeSine(Config.LEFT_FILE_100HZ, Config.SINE_ABS_BASE_100HZ, 16000)
         else:
             result_100hz = ''
         # 再测试300hz的
@@ -140,7 +140,7 @@ class mainWin(wx_windows.MainFrame):
                 self.audioWrapper.genOutput(Config.LEFT_FILE_300HZ, True, 16000)
 
             self.audioWrapper.waitForFinish()
-            result_300hz = self.audioJudge.judgeSine(Config.LEFT_FILE_300HZ, Config.SINE_ABS_BASE, 16000)
+            result_300hz = self.audioJudge.judgeSine(Config.LEFT_FILE_300HZ, Config.SINE_ABS_BASE_300HZ, 16000)
         else:
             result_300hz = ''
 
@@ -190,7 +190,7 @@ class mainWin(wx_windows.MainFrame):
                 self.audioWrapper.genOutput(Config.RIGHT_FILE_100HZ, True, 16000)
 
             self.audioWrapper.waitForFinish()
-            result_100hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_100HZ, Config.SINE_ABS_BASE, 16000)
+            result_100hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_100HZ, Config.SINE_ABS_BASE_100HZ, 16000)
         else:
             result_100hz = ''
         # 再测试300hz的
@@ -202,7 +202,7 @@ class mainWin(wx_windows.MainFrame):
                 self.audioWrapper.genOutput(Config.RIGHT_FILE_300HZ, True, 16000)
 
             self.audioWrapper.waitForFinish()
-            result_300hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_300HZ, Config.SINE_ABS_BASE, 16000)
+            result_300hz = self.audioJudge.judgeSine(Config.RIGHT_FILE_300HZ, Config.SINE_ABS_BASE_300HZ, 16000)
         else:
             result_300hz = ''
 

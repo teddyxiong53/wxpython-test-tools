@@ -15,13 +15,27 @@ import math
 
 READ_POS=20000
 
-print = debug
+# print = debug
 
 left_y_data = []
 right_y_data = []
 ref_y_data = []
 aec_y_data = []
 
+def calc_db(data, points):
+    db_val = 0
+
+    for v in data:
+        db_val += abs(v)*abs(v)
+    # print('sum:{}'.format(db_val))
+    db_val = db_val/points
+    # 然后开方
+    db_val = math.sqrt(db_val)
+    # 然后求对数。
+    db_val = 20* math.log(db_val/32767,10)
+    # 保留一位小数就好了
+    db_val = round(db_val, 1)
+    return db_val
 
 class AudioJudge():
     '''
@@ -50,7 +64,7 @@ class AudioJudge():
             read_size = 160
         elif filename.find('300hz.wav') != -1:
             read_pos = READ_POS
-            read_size = 160 # 统一都读取160个点。这样100hz和300hz，都可以保证至少有一个完整的正弦波。
+            read_size = 54 # 保证至少有一个完整的正弦波。
         try:
             self.inputWaveFile.setpos(read_pos)
         except:
@@ -66,20 +80,20 @@ class AudioJudge():
         # print(unpacked_data)
         # 对于100hz和300hz的，只看最大值和最小值。
         if filename.find('00hz.wav') != -1:
-            max_val = max(unpacked_data)
-            min_val = min(unpacked_data)
-            print("最大值：{}".format(max_val))
-            print("最小值：{}".format(min_val))
-            if max_val < judgeValue or abs(min_val) < judgeValue:
-                result = '幅值太小({},{})'.format(min_val,max_val)
+            # 现在因为设置值是dB值，所以还是需要计算dB值来比较。
+            db_val = calc_db(unpacked_data, read_size)
+            print('{}文件的db计算结果为：{}'.format(filename, db_val))
+            if db_val < judgeValue:
+                result = '幅值太小({}dB)'.format(db_val)
                 return result
             # 判断是否有截顶。
-            for i in range(15):
+            for i in range(read_size-1):
                 # print(i)
-                if unpacked_data[i] == unpacked_data[i+1]:
+                if unpacked_data[i] == unpacked_data[i+1] and unpacked_data[i]>=32767:
+                    #print('{}:{},{}:{}'.format(i, unpacked_data[i], i+1, unpacked_data[i+1]))
                     result = '有截顶'
                     return result
-            return '正常'
+            return '正常,{}dB'.format(db_val)
 
         if filename.find('left.wav') != -1:
             left_y_data = unpacked_data
@@ -119,16 +133,8 @@ class AudioJudge():
         # print(unpacked_data)
 
 
-        max_val = max(unpacked_data)
-        min_val = min(unpacked_data)
-        print("最大值：{}".format(max_val))
-        print("最小值：{}".format(min_val))
-        if max_val < judgeValue or abs(min_val) < judgeValue:
-            result = '幅值太小({},{})'.format(min_val,max_val)
-            if filename.find('ref.wav') != -1 and max_val<5:
-                result += ',FL123问题'
-            else:
-                result += ',{}dB'.format(db_val)
+        if db_val < judgeValue :
+            result = '幅值太小({}dB)'.format(db_val)
             return result
         # 判断是否有截顶。
         for i in range(15):
@@ -169,10 +175,15 @@ class AudioJudge():
         min_val = min(unpacked_data)
         print("最大值：{}".format(max_val))
         print("最小值：{}".format(min_val))
-        if not (max_val < Config.LINE_ABS_BASE and abs(min_val) < Config.LINE_ABS_BASE):
-            result = '降噪不好({},{})'.format(min_val,max_val)
+        count = 0
+        for i in unpacked_data:
+            if abs(i) > Config.LINE_ABS_BASE:
+                count = count + 1
+        print('超过基准值的点的个数有：{}'.format(count))
+        if count > Config.LINE_POINTS:
+            result = '降噪不好({},{})，超基准点个数{}'.format(min_val,max_val,count)
             return result
-        return '正常'
+        return '正常，超基准点个数{}'.format(count)
 
 if __name__ == '__main__':
     j = AudioJudge()
